@@ -1,12 +1,14 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
 import applicationReducer from '../slice/aplication'
 
+import socketMiddleware from './middlewares/socket'
+
 const rootReducer = {
   application: applicationReducer
 }
 
 const createStore = () => {
-  const middleware = [...getDefaultMiddleware()]
+  const middleware = [...getDefaultMiddleware(), socketMiddleware]
   const store = configureStore({
     reducer: rootReducer,
     middleware,

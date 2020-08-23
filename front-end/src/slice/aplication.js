@@ -1,9 +1,10 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, createAction } from '@reduxjs/toolkit'
 
 const initialState = {
   message: "default",
   loadList: "idle",
-  list: []
+  list: [],
+  socketConnected: false
 }
 
 const applicationSlice = createSlice({
@@ -35,14 +36,17 @@ const applicationSlice = createSlice({
     loadListIdle: (state, action) => {
       state.loadList = "idle"
     },
+    socketConnected: (state, action) => {
+      state.socketConnected = true
+    },
   }
 })
 
 const { actions, reducer } = applicationSlice
-export const { changeMessage, loadListRequest, loadListSuccess, loadListFailure, loadListIdle} = actions
+export const { changeMessage, loadListRequest, loadListSuccess, loadListFailure, loadListIdle, socketConnected } = actions
 export default reducer
 
-export const fetchAPI = (arg) => async (dispatch, getState) => {
+export const fetchAPI = () => async (dispatch, getState) => {
   try {
     dispatch(loadListRequest())
     const res = await fetch('http://localhost:4000/list')
@@ -56,3 +60,5 @@ export const fetchAPI = (arg) => async (dispatch, getState) => {
     dispatch(loadListIdle())
   }
 }
+
+export const connectSocket = createAction('application/connectSocket')
