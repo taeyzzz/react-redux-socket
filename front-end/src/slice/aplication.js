@@ -1,10 +1,21 @@
 import { createSlice, createAction } from '@reduxjs/toolkit'
 
+export const sendMessageSocket = createAction("sendMessageSocket", (message) => {
+  return {
+    payload: {
+      message,
+    }
+  }
+})
+
 const initialState = {
   message: "default",
   loadList: "idle",
   list: [],
-  socketConnected: false
+  socketConnected: false,
+  listUser: [],
+  listChat: [],
+  currentUser: undefined
 }
 
 const applicationSlice = createSlice({
@@ -39,11 +50,29 @@ const applicationSlice = createSlice({
     socketConnected: (state, action) => {
       state.socketConnected = true
     },
+    updateNewLoginUser: {
+      reducer: (state, action) => {
+        state.listUser = action.payload.listUser
+      },
+      prepare: (listUser) => ({ payload: { listUser } })
+    },
+    updateListChat: {
+      reducer: (state, action) => {
+        state.listChat = [...state.listChat, { message: action.payload.message, author: action.payload.author }]
+      },
+      // prepare: (listUser) => ({ payload: { listUser } })
+    },
+    loginSocket: {
+      reducer: (state, action) => {
+        state.currentUser = action.payload.userName
+      },
+      prepare: (userName) => ({ payload: { userName } })
+    }
   }
 })
 
 const { actions, reducer } = applicationSlice
-export const { changeMessage, loadListRequest, loadListSuccess, loadListFailure, loadListIdle, socketConnected } = actions
+export const { changeMessage, loadListRequest, loadListSuccess, loadListFailure, loadListIdle, socketConnected, updateNewLoginUser, updateListChat, loginSocket } = actions
 export default reducer
 
 export const fetchAPI = () => async (dispatch, getState) => {

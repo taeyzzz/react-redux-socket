@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import { changeMessage,connectSocket } from "../../slice/aplication";
+import { changeMessage,connectSocket, loginSocket } from "../../slice/aplication";
 
 import "./styles.scss"
 
@@ -14,7 +14,8 @@ export default (props) => {
     setName(e.target.value)
   }
   const handleSubmit = () => {
-    console.log(name);
+    dispatch(loginSocket(name))
+    props.history.push("/home")
   }
   return (
     <div className="login-page-container">
